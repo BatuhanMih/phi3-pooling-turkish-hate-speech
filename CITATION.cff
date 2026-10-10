@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "Bu yazılımı kullanırsanız lütfen depoyu ve ilişkili makaleyi kaynak gösterin."
+title: "Phi-3 Representation Pooling for Turkish Hate Speech Detection"
+type: software
+authors:
+  - family-names: "Mıh"
+    given-names: "Batuhan"
+repository-code: "https://github.com/BatuhanMih/phi3-pooling-turkish-hate-speech"
+license: MIT
+version: 1.0.0
+date-released: 2026-10-10
+
