@@ -1,0 +1,16 @@
+protocol: development_confirmatory_5x2
+records: 1500
+repetitions: 5
+directions_per_repetition: 2
+replicates_per_direction: 3
+train_records_per_direction: 750
+evaluation_records_per_direction: 750
+official_test_accessed: false
+conditions:
+  P0: last_hidden_last_valid_token
+  P1: last_hidden_masked_mean
+  P2: equal_last_four_then_masked_mean
+  P5: learned_softmax_last_four_then_masked_mean
+analysis_unit: repetition
+selection_or_promotion_applied: false
+

@@ -1,0 +1,42 @@
+campaign: p0_p5_main
+model:
+  id: microsoft/Phi-3-mini-4k-instruct
+  revision: f39ac1d28e925b323eae81227eaba4464caced4e
+  max_length: 128
+data:
+  training_records: 9550
+  validation_records: 0
+  official_test_used_for_training: false
+conditions:
+  - P0
+  - P5
+paired_seeds: [42, 142, 242, 342, 442, 542, 642, 742, 842, 942]
+training:
+  epochs: 3
+  optimizer_steps_per_checkpoint: 7164
+  learning_rate: 8.687484140587463e-05
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 4
+  effective_batch_size: 4
+  warmup_ratio: 0.1951244703273512
+  weight_decay: 0.004708867394382477
+  label_smoothing: 0.05
+  gradient_checkpointing: true
+lora:
+  rank: 16
+  alpha: 16
+  dropout: 0.0697368029059364
+  target_modules: [qkv_proj]
+quantization:
+  bits: 4
+  type: nf4
+  double_quantization: true
+  compute_dtype: float16
+optimizer: paged_adamw_32bit
+classifier:
+  bias: false
+prediction:
+  rule: argmax
+  threshold_tuning: false
+  calibration: false
+
