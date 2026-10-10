@@ -1,4 +1,4 @@
-# Phi-3 ile Türkçe nefret söylemi sınıflandırması
+# Türkçe Nefret Söylemi Tespitinde Kaynak Kısıtlı Model Uyarlaması: Temsil Havuzlama ve Ayrı Değerlendirme Protokolleri
 
 Bu depo, Phi-3-mini-4k-instruct modelinde temsil havuzlama seçiminin Türkçe nefret söylemi sınıflandırmasına etkisini inceleyen çalışmanın kod ve yeniden üretilebilirlik dosyalarını içerir.
 
