@@ -1,0 +1,14 @@
+{
+  "protocol": "researcher_run_label_concealed_paired_reevaluation",
+  "independent_blind_test": false,
+  "official_test_records": 2693,
+  "completed_evaluations": 20,
+  "paired_seeds": 10,
+  "mean_p0_macro_f1": 0.7294945386296006,
+  "mean_p5_macro_f1": 0.7106269236765453,
+  "mean_paired_p5_minus_p0": -0.018867614953055244,
+  "hierarchical_bootstrap_95_ci": [-0.03115699170144604, -0.006663491658243471],
+  "exact_two_sided_sign_flip_p": 0.00390625,
+  "analysis_changed_after_results": false
+}
+

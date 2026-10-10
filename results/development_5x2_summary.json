@@ -1,0 +1,28 @@
+{
+  "protocol": "separate_development_confirmatory_5x2",
+  "records": 1500,
+  "analysis_unit": "five_repetitions",
+  "official_test_accessed": false,
+  "overall_mean_macro_f1": {
+    "P0": 0.5323226725106343,
+    "P1": 0.5822179171170803,
+    "P2": 0.5886687871433888,
+    "P5": 0.5890549745838147
+  },
+  "paired_repetition_contrasts": {
+    "P1_minus_P0": {
+      "mean": 0.04989524460644605,
+      "student_t_95_ci": [0.03699817540671019, 0.06279231380618192]
+    },
+    "P2_minus_P1": {
+      "mean": 0.006450870026308442,
+      "student_t_95_ci": [-0.01055141145711699, 0.023453151509733875]
+    },
+    "P5_minus_P2": {
+      "mean": 0.00038618744042591137,
+      "student_t_95_ci": [-0.0012761298429472105, 0.0020485047237990333]
+    }
+  },
+  "selection_or_promotion_applied": false
+}
+
