@@ -5,11 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "phi3-pooling"
 version = "1.0.0"
-description = "Representation pooling components used in a Turkish hate speech classification study."
+description = "Representation pooling components for a Turkish hate speech classification project."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-authors = [{ name = "Batuhan Mıh" }]
+authors = [
+  { name = "Batuhan Mıh" },
+  { name = "Mustafa Kurtulan" },
+  { name = "Faruk Topal" },
+]
 dependencies = [
   "numpy>=1.26,<3",
   "torch>=2.2",

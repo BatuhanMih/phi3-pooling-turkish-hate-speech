@@ -1,10 +1,14 @@
 cff-version: 1.2.0
-message: "Bu yazılımı kullanırsanız lütfen depoyu ve ilişkili makaleyi kaynak gösterin."
-title: "Türkçe Nefret Söylemi Tespitinde Kaynak Kısıtlı Model Uyarlaması: Temsil Havuzlama ve Ayrı Değerlendirme Protokolleri"
+message: "Bu yazılımı kullanırsanız lütfen bu depoyu kaynak gösterin."
+title: "Phi-3 ile Türkçe Nefret Söylemi Tespiti: Temsil Havuzlama Projesi"
 type: software
 authors:
   - family-names: "Mıh"
     given-names: "Batuhan"
+  - family-names: "Kurtulan"
+    given-names: "Mustafa"
+  - family-names: "Topal"
+    given-names: "Faruk"
 repository-code: "https://github.com/BatuhanMih/phi3-pooling-turkish-hate-speech"
 license: MIT
 version: 1.0.0

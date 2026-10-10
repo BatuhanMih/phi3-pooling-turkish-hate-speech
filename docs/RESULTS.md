@@ -30,5 +30,5 @@ P5−P0 farkı −0,0189'dur. 100.000 tekrarlı eşleştirilmiş hiyerarşik boo
 
 Bu değerlendirme araştırmacı tarafından yürütülmüş ve ara sonuçlarla örnek düzeyindeki etiketler kampanya bitene kadar kullanıcıya gösterilmemiştir. Bununla birlikte test kümesi daha önce kullanıldığı ve bağımsız veri sorumlusu bulunmadığı için sonuç bağımsız ya da dokunulmamış kör test olarak tanımlanmaz.
 
-Makaledeki bilimsel sonuçlar için `results/` altındaki toplulaştırılmış JSON dosyaları kullanılabilir. `official_paired_analysis.json` eşleştirilmiş on seed'in sonuçlarını ve kilitli analiz ayarlarını içerir. Dondurulmuş P2 raporu `reproducibility/frozen/p2_eq4/` altındadır.
+Bu sonuçların ayrıntıları için `results/` altındaki toplulaştırılmış JSON dosyaları kullanılabilir. `official_paired_analysis.json` eşleştirilmiş on seed'in sonuçlarını ve kilitli analiz ayarlarını içerir. Dondurulmuş P2 raporu `reproducibility/frozen/p2_eq4/` altındadır.
 

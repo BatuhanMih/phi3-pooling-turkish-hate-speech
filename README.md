@@ -1,29 +1,54 @@
-# Türkçe Nefret Söylemi Tespitinde Kaynak Kısıtlı Model Uyarlaması: Temsil Havuzlama ve Ayrı Değerlendirme Protokolleri
+# Phi-3 ile Türkçe Nefret Söylemi Tespiti
 
-Bu depo, Phi-3-mini-4k-instruct modelinde temsil havuzlama seçiminin Türkçe nefret söylemi sınıflandırmasına etkisini inceleyen çalışmanın kod ve yeniden üretilebilirlik dosyalarını içerir.
+> Phi-3 Mini üzerinde farklı temsil havuzlama yöntemlerini karşılaştıran, kaynak kısıtlı Türkçe metin sınıflandırma projesi.
 
-Çalışmanın temel karşılaştırması dört koşuldan oluşur:
+## Genel bakış
 
-| Koşul | Temsil |
+Bu projede `microsoft/Phi-3-mini-4k-instruct` modeli, 4-bit QLoRA ile iki sınıflı Türkçe nefret söylemi tespitine uyarlanır. Amaç, son-token temsilinden maskeli ortalama havuzlamaya ve çoklu katman birleşimine geçişin etkisini ayrı koşullarda incelemektir.
+
+Depoda küçük bir referans uygulama, deney yapılandırmaları, birim testleri, toplulaştırılmış sonuçlar ve deneylerde kullanılan dondurulmuş betikler bulunur. Lisanslı veri, test etiketleri ve model checkpointleri bulunmaz.
+
+## Karşılaştırılan yöntemler
+
+| Koşul | Temsil yöntemi |
 | --- | --- |
-| P0 | Son gizli katmandaki son geçerli token |
-| P1 | Son gizli katmana maskeli ortalama |
-| P2 | Son dört katmanın eşit ağırlıklı ortalaması, ardından maskeli ortalama |
-| P5 | Son dört katmanın öğrenilebilir softmax ağırlıklarıyla birleşimi, ardından maskeli ortalama |
+| P0 | Son gizli katmanın son geçerli token temsili |
+| P1 | Son gizli katmana maskeli ortalama havuzlama |
+| P2 | Son dört gizli katmanın eşit ağırlıklı ortalaması ve maskeli ortalama havuzlama |
+| P5 | Son dört gizli katmanın öğrenilebilir softmax birleşimi ve maskeli ortalama havuzlama |
 
-Kod iki bölüm halinde tutulur. `src/phi3_pooling/` küçük ve okunabilir bir referans uygulamadır. `reproducibility/frozen/` ise deneylerde kullanılan dondurulmuş betikleri içerir; bu dosyalar tarihsel kanıt olarak değiştirilmeden saklanır.
+Bu ayrım, token havuzlama ile katman birleştirmenin katkılarını birbirinden ayırır.
 
-## Sonuçların kısa özeti
+## Teknoloji ve yapılandırma
 
-1.500 kayıtlık ayrı 5×2 geliştirme protokolünde ortalama Macro-F1 değerleri P0 için 0,5323; P1 için 0,5822; P2 için 0,5887 ve P5 için 0,5891'dir. Kazancın büyük bölümü son-token temsilinden maskeli ortalamaya geçişte ortaya çıkmıştır.
+| Bileşen | Kullanılan yaklaşım |
+| --- | --- |
+| Temel model | Phi-3 Mini 4K Instruct |
+| Uyarlama | 4-bit NF4 QLoRA |
+| LoRA hedefi | `qkv_proj` |
+| Azami dizi uzunluğu | 128 token |
+| Sınıflandırma | Bias içermeyen iki sınıflı doğrusal katman |
+| Değerlendirme | Macro-F1, ayrı geliştirme ve resmî test protokolleri |
 
-2.693 kayıtlık resmî test üzerinde yapılan eşleştirilmiş yeniden değerlendirmede P0 ortalaması 0,7295, P5 ortalaması 0,7106'dır. Eşleştirilmiş fark P5−P0 = −0,0189; %95 güven aralığı [−0,0312, −0,0067] ve kesin iki taraflı sign-flip p-değeri 0,0039'dur. Bu değerlendirme araştırmacı tarafından yürütülmüş, etiketler sonuç tamamlanana kadar gizlenmiştir; bağımsız kör test olarak sunulmaz.
+Tam ayarlar ve protokol sınırları [`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md), [`docs/DATA.md`](docs/DATA.md) ve `configs/` altında açıklanır.
 
-Ayrıntılı sayılar ve protokol ayrımı için [`docs/RESULTS.md`](docs/RESULTS.md) dosyasına bakın.
+## Kod mimarisi
 
-## Kurulum
+```text
+src/phi3_pooling/          P0/P1/P2/P5 için okunabilir havuzlama bileşenleri
+configs/                  Deney yapılandırmalarının özetleri
+scripts/                  Sonuç özetleme araçları
+tests/                    Birim testleri
+docs/                     Mimari, veri, deney ve yeniden üretilebilirlik notları
+results/                  Toplulaştırılmış metrikler
+reproducibility/frozen/   Deneylerde kullanılan, değiştirilmeden saklanan betikler
+```
 
-Python 3.11 önerilir. PyTorch kurulumu CUDA sürümüne bağlı olduğu için önce uygun paketi [PyTorch kurulum sayfasından](https://pytorch.org/get-started/locally/) kurun. Ardından:
+`src/phi3_pooling/` yöntemleri anlamak ve yeni uygulamalara başlangıç yapmak içindir. `reproducibility/frozen/` altındaki betikler ise yürütülmüş deneylerin kayıtlarıdır; taşınabilir, tek komutluk eğitim paketi olarak değerlendirilmemelidir.
+
+## Kurulum ve hızlı örnek
+
+Python 3.11 önerilir. PyTorch'u donanımınıza uygun seçenekle [resmî kurulum sayfasından](https://pytorch.org/get-started/locally/) kurduktan sonra:
 
 ```bash
 python -m venv .venv
@@ -32,45 +57,42 @@ python -m pip install -e ".[dev]"
 pytest
 ```
 
-Hızlı örnek:
+Havuzlama modülünü sahte gizli durum tensörleriyle deneyebilirsiniz; bu örnek model eğitimi veya veri indirmesi başlatmaz:
 
 ```python
 import torch
 from phi3_pooling import PoolingHead
 
 hidden_states = tuple(torch.randn(2, 8, 32) for _ in range(4))
-attention_mask = torch.tensor([[1, 1, 1, 1, 0, 0, 0, 0],
-                               [1, 1, 1, 1, 1, 1, 0, 0]])
+attention_mask = torch.tensor([
+    [1, 1, 1, 1, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1, 1, 0, 0],
+])
 
-head = PoolingHead(mode="p2")
-representations = head(hidden_states, attention_mask)
+representations = PoolingHead(mode="p2")(hidden_states, attention_mask)
+print(representations.shape)
 ```
 
-## Depo düzeni
+## Sonuçlara kısa bakış
 
-```text
-configs/                    Deney sözleşmelerinin okunabilir özetleri
-docs/                       Veri, mimari, deney ve sonuç notları
-results/                    Yalnızca toplulaştırılmış sonuçlar
-scripts/                    Sonuç dosyalarını özetleyen yardımcı araçlar
-src/phi3_pooling/           Okunabilir referans uygulama
-tests/                      Birim testleri
-reproducibility/frozen/     Deneylerde kullanılan dondurulmuş betikler
-```
+Ayrı 5×2 geliştirme protokolünde ortalama Macro-F1 değerleri P0/P1/P2/P5 için sırasıyla 0,5323 / 0,5822 / 0,5887 / 0,5891'dir. Bu protokoldeki en büyük artış, son-token temsilinden maskeli ortalamaya geçişte görülür.
 
-## Veri ve özel dosyalar
+2.693 kayıtlık resmî testte, aynı kayıtlar üzerinde eşleştirilmiş P0/P5 yeniden değerlendirmesinde ortalama Macro-F1 değerleri sırasıyla 0,7295 ve 0,7106'dır. Geliştirme ve resmî test farklı protokollerdir; sonuçları tek bir sıralama gibi birleştirmemek gerekir. Test değerlendirmesi araştırmacı tarafından yürütülmüştür; bağımsız kör değerlendirme olarak sunulmaz.
 
-SU-HS ham verisi, resmî test dosyası, gold etiketler, örnek düzeyindeki tahminler, checkpointler ve imzalı lisans belgeleri bu depoda yer almaz. Veriyi kullanmak isteyen araştırmacıların veri sağlayıcısının lisans ve erişim koşullarını ayrıca karşılaması gerekir.
+Yöntem, istatistikler ve sınırlılıklar için [`docs/RESULTS.md`](docs/RESULTS.md) dosyasına bakın.
 
-## Katkı sahipleri
+## Veri ve erişim
 
-- Batuhan Mıh — araştırma, deney tasarımı, modelleme ve makale
-- Mustafa Kurtulan — proje katkıcısı
-- Faruk Topal — proje katkıcısı
+SU-HS ham verisi, resmî test dosyası, gold etiketler, örnek düzeyindeki tahminler, checkpointler ve imzalı kullanım belgeleri depoda yoktur. Veri kullanımı için sağlayıcının erişim ve lisans koşulları ayrıca karşılanmalıdır. Ayrıntılar [`docs/DATA.md`](docs/DATA.md) içinde yer alır.
 
-Bu bölüm proje katkılarını gösterir. Makale yazarlığı ve akademik atıf bilgisi [`CITATION.cff`](CITATION.cff) dosyasında ayrıca tanımlanmıştır.
+## Proje ekibi
 
-## Lisans
+- [Batuhan Mıh](https://github.com/BatuhanMih)
+- [Mustafa Kurtulan](https://github.com/MustafaKurtulan)
+- [Faruk Topal](https://github.com/faruktopal)
 
-Bu depodaki özgün kod MIT lisansıyla yayımlanır. Veri kümeleri, model ağırlıkları ve üçüncü taraf bileşenler kendi lisanslarına tabidir. Ayrıntılar için [`LICENSE`](LICENSE) ve [`docs/DATA.md`](docs/DATA.md) dosyalarına bakın.
+Ekip bilgileri [`CONTRIBUTORS.md`](CONTRIBUTORS.md) dosyasında da bulunur. GitHub'daki ekip listesi, kişilerin katkı commit'leri ve davet kabul durumuyla aynı şey değildir.
 
+## Katkı ve lisans
+
+Katkı akışı için [`CONTRIBUTING.md`](CONTRIBUTING.md) dosyasına bakın. Depodaki özgün kod MIT lisanslıdır; veri ve üçüncü taraf model bileşenleri kendi lisanslarına tabidir.
